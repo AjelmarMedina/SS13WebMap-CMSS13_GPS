@@ -60,11 +60,11 @@ function bakeLayers(data, webmap, bounds){
  * @param {L.polygon} polygon  - Polygon, gets generated automaticaly
  */
 function attachListener(webmap, bounds, polygon=newpoly(webmap)){    
-    var lat = 0, lng = 0, latDif = 0, lngDif = 0;
+    var coords, lat = 0, lng = 0, latDif = 0, lngDif = 0;
     webmap.on('mousemove', (e) => {
         lat = Math.floor(e.latlng.lat);
         lng = Math.floor(e.latlng.lng);
-        var coords = leaflet2ss13(lat, lng, bounds);
+        coords = leaflet2ss13(lat, lng, bounds);
         polygon.setLatLngs([
             [lat, lng],
             [lat + 1, lng],
@@ -78,8 +78,12 @@ function attachListener(webmap, bounds, polygon=newpoly(webmap)){
         if (e.key == " " || e.code == "Space") {
             lngDif = parseInt(prompt("Area of Operation (X)")) - (lng + 1);
             latDif = parseInt(prompt("Area of Operation (Y)")) - (lat + Math.abs(bounds[1][0]) + 1);
-            console.log(latDif);
-            console.log(lngDif);
+            if (!(lngDif || latDif)) {
+                lngDif = 0;
+                latDif = 0;
+            }
+        } else if (e.key == "c" || e.code == "c") {
+            prompt("", `${coords.x + lngDif}, ${coords.y + latDif}`)
         }
     })
 
