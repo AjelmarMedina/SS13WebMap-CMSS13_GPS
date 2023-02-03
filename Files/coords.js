@@ -60,9 +60,10 @@ function bakeLayers(data, webmap, bounds){
  * @param {L.polygon} polygon  - Polygon, gets generated automaticaly
  */
 function attachListener(webmap, bounds, polygon=newpoly(webmap)){    
+    var lat = 0, lng = 0, latDif = 0, lngDif = 0;
     webmap.on('mousemove', (e) => {
-        var lat = Math.floor(e.latlng.lat);
-        var lng = Math.floor(e.latlng.lng);
+        lat = Math.floor(e.latlng.lat);
+        lng = Math.floor(e.latlng.lng);
         var coords = leaflet2ss13(lat, lng, bounds);
         polygon.setLatLngs([
             [lat, lng],
@@ -70,8 +71,17 @@ function attachListener(webmap, bounds, polygon=newpoly(webmap)){
             [lat + 1, lng + 1],
             [lat, lng + 1],
             [lat, lng]
-        ]).redraw().bindTooltip(coords.x + ',' + coords.y).openTooltip().addTo(webmap);
+        ]).redraw().bindTooltip((coords.x + lngDif) + ',' + (coords.y + latDif)).openTooltip().addTo(webmap);
     });
+
+    document.addEventListener('keyup', (e) => {
+        if (e.key == " " || e.code == "Space") {
+            lngDif = parseInt(prompt("Area of Operation (X)")) - (lng + 1);
+            latDif = parseInt(prompt("Area of Operation (Y)")) - (lat + Math.abs(bounds[1][0]) + 1);
+            console.log(latDif);
+            console.log(lngDif);
+        }
+    })
 
     let query = readquery();
     console.info(`Parsing parameter cords, param:`,query);
@@ -144,7 +154,7 @@ function readquery(){
  * @returns {L.polygon} - Returns the polygon that got created
  */
 function newpoly(webmap, config={"fill": false, "color": '#40628a', "weight": 5}){
-    const c = ["Poly wanna cracker!", "Check the crystal, you chucklefucks!","Stop wasting precius bytes on the webmap Adri!!","Wire the solars, you lazy bums!","Stop breaking the webmap!!!","WHO TOOK THE DAMN HARDSUITS?","The console blares, GET https://www.googletagmanager.com/gtag/js?id=UA-115958323-1 net::ERR_BLOCKED_BY_CLIENT","CE, the clown ran \"rm -rf /\" on the NTNet station map server","OH GOD ITS ABOUT TO DELAMINATE CALL THE SHUTTLE"];
+    const c = ["Poly wanna cracker!", "Check the crystal, you chucklefucks!","Stop wasting precius bytes on the webmap Adri!!","Wire the solars, you lazy bums!","Stop breaking the webmap!!!","WHO TOOK THE DAMN HARDSUITS?","The console blares, GET https://www.googletagmanager.com/gtag/js?id=UA-115958323-1 net::ERR_BLOCKED_BY_CLIENT","CE, the clown ran \"rm -rf /\" on the NTNet station map server","OH GOD ITS ABOUT TO DELAMINATE CALL THE SHUTTLE","Vlad Ymir was here"];
     console.warn("Poly "+["squawks","says","yells"][Math.floor(Math.random()*3)]+", "+c[Math.floor(Math.random()*c.length)]);
     var polygon = L.polygon([], config).addTo(webmap);
     return polygon
