@@ -82,7 +82,7 @@ function attachListener(webmap, bounds, polygon=newpoly(webmap)){
                 lngDif = 0;
                 latDif = 0;
             }
-        } else if (e.key == "c" || e.code == "c") {
+        } else if (e.key == "c" || e.code == "c" || e.key == "C") {
             prompt("", `${coords.x + lngDif}, ${coords.y + latDif}`)
         }
     })
